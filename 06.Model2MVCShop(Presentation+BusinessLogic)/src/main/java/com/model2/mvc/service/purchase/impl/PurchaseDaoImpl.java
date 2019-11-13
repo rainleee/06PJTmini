@@ -71,7 +71,7 @@ public class PurchaseDaoImpl implements PurchaseDao {
 
 		List<Purchase> list = sqlSession.selectList("PurchaseMapper.getPurchaseList", map);
 		
-		System.out.println("Dao getPurchaseList ::: "+list);
+//		System.out.println("Dao getPurchaseList ::: "+list);
 		
 		for (int i = 0; i < list.size(); i++) {
 			list.get(i).setBuyer((User)sqlSession.selectOne("UserMapper.getUser", list.get(i).getBuyer().getUserId()));

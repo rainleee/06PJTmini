@@ -42,7 +42,7 @@
 			<result property="manuDate" column="manufacture_day"  jdbcType="VARCHAR"/>
 			<result property="price" column="price" jdbcType="NUMERIC"/>
 			<result property="fileName" column="image_file" jdbcType="VARCHAR"/>
-			<result property="regDate" column="REG_DATE"  jdbcType="DATE" />
+			<result property="regDate" column="reg_date"  jdbcType="DATE" />
 
 		</association>
 		
@@ -63,13 +63,14 @@
 			tran_status_code, 
 			order_data, 
 			dlvy_date ) 
-			VALUES(seq_purchase_no.NEXTVAL, #{purchaseProd:VARCHAR}, #{buyer:VARCHAR}, #{paymentOption:VARCHAR}, #{receiverName:VARCHAR}, #{receiverPhone:VARCHAR}, #{divyAddr:VARCHAR}, #{divyRequest:VARCHAR}, #{tranCode:VARCHAR}, sysdate, #{divyDate:VARCHAR})
+			VALUES(seq_purchase_no.NEXTVAL, #{purchaseProd.prodNo}, #{buyer.userId}, #{paymentOption:VARCHAR}, #{receiverName:VARCHAR}, #{receiverPhone:VARCHAR}, #{divyAddr:VARCHAR}, #{divyRequest:VARCHAR}, #{tranCode:VARCHAR}, sysdate, #{divyDate:VARCHAR})
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
 	 <select 	id="getPurchase"	parameterType="int"	resultMap="purchaseSelectMap">
 		SELECT
 		tran_no,
+		prod_no, 
 		buyer_id,
 		payment_option,
 		receiver_name,

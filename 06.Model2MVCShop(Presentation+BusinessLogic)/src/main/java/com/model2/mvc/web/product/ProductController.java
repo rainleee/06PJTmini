@@ -75,7 +75,7 @@ public class ProductController {
 		//Business Logic
 		Product product = productService.getProduct(prodNo);
 		// Model 과 View 연결
-		model.addAttribute("prodNo", prodNo);
+		model.addAttribute("product", product);
 		model.addAttribute("menu", menu);
 		
 		//쿠키구현은 @CookieValue를 사용해서 여기서 
@@ -97,7 +97,7 @@ public class ProductController {
 		Product product = productService.getProduct(prodNo);
 		
 		// Model 과 View 연결
-		model.addAttribute("prodNo", prodNo);
+		model.addAttribute("product", product);
 		
 		return "forward:/product/updateProduct.jsp";
 	}
