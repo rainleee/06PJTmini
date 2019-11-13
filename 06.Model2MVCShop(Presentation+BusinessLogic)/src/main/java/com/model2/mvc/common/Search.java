@@ -16,6 +16,14 @@ public class Search {
 	private int endRowNum;
 	private int startRowNum;
 	
+	public void setEndRowNum(int endRowNum) {
+		this.endRowNum = endRowNum;
+	}
+
+	public void setStartRowNum(int startRowNum) {
+		this.startRowNum = startRowNum;
+	}
+
 	///Constructor
 	public Search() {
 	}
