@@ -59,9 +59,16 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 	
 	@Override
-	public Map<String, Object> getSaleList(Search search) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Object> getSaleList(Search search, String buyerId) throws Exception {
+		System.out.println("search ::: "+search);
+		
+		Map<String,Object> map = purchaseDao.getPurchaseList(search, buyerId);
+		
+		int totalCount = purchaseDao.getTotalCount(buyerId);
+		
+		map.put("totalCount", new Integer(totalCount));
+		
+		return map;
 	}
 
 	@Override

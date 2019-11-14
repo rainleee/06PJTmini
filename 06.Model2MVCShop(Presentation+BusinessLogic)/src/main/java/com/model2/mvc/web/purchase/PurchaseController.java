@@ -196,4 +196,41 @@ public class PurchaseController {
 		
 		return "forward:/purchase/listPurchase.jsp";
 	}
+	
+	@RequestMapping("/listSale.do")
+	public String listSale( @ModelAttribute("search") Search search ,
+								@ModelAttribute("page") Page page ,
+								@ModelAttribute("user") User user,
+								Model model , HttpSession session) throws Exception{
+		
+		System.out.println("/listSale.do");
+		
+		if(search.getCurrentPage() ==0 ){
+			search.setCurrentPage(1);
+		}
+		
+		search.setPageSize(pageSize);
+		//아래 보여줄 pageUnit을 세팅해줬음. 페지이 모델어트리뷰트 추가
+		page.setPageUnit(pageUnit);
+		
+		user = (User) session.getAttribute("user");
+		
+		
+		
+		// Business logic 수행
+		Map<String , Object> map = purchaseService.getPurchaseList(search, user.getUserId());
+		System.out.println("map : " + map);
+		
+		
+		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println(resultPage);
+		
+		// Model 과 View 연결
+		model.addAttribute("list", map.get("list"));
+		model.addAttribute("resultPage", resultPage);
+		model.addAttribute("search", search);
+		
+		return "forward:/purchase/listSale.jsp";
+	}
+	
 }

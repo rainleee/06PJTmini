@@ -22,7 +22,7 @@ public interface PurchaseService {
 	public Map<String, Object> getPurchaseList(Search search, String buyerId) throws Exception;
 	
 	//getSaleList(판매리스트 미구현기능)
-	public Map<String,Object> getSaleList(Search search) throws Exception;
+	public Map<String,Object> getSaleList(Search search, String buyerId) throws Exception;
 	
 	//updatePurcahse
 	public void updatePurcahse(Purchase purchase) throws Exception;

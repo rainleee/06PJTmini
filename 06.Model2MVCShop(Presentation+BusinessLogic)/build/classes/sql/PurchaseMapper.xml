@@ -114,6 +114,22 @@
 						WHERE row_seq BETWEEN #{search.startRowNum:INTEGER} AND #{search.endRowNum:INTEGER} 
 	 </select>
 	 
+	 <!-- SQL : SELECT LIST -->
+	 <select  id="getSaleList"  parameterType="map"	resultMap="purchaseSelectMap">
+	  	SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		(	SELECT 
+										u.user_id,
+										u.user_name,
+										u.password
+										FROM transaction t, users u
+										WHERE t.buyer_id = u.user_id
+										AND t.buyer_id = #{buyerId:VARCHAR}
+										ORDER BY tran_no) inner_table
+						WHERE ROWNUM &lt;= #{search.endRowNum:INTEGER} )
+						WHERE row_seq BETWEEN #{search.startRowNum:INTEGER} AND #{search.endRowNum:INTEGER} 
+	 </select>
+	 
 	 <!-- SQL : updatePurchse -->
 	 <update	id="updatePurchase"	parameterType="purchase" >
 	   	UPDATE transaction 
