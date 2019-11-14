@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.ModelAndView;
 
 import com.model2.mvc.common.Page;
 import com.model2.mvc.common.Search;
@@ -112,7 +113,6 @@ public class PurchaseController {
 		
 		//Business Logic
 		Purchase purchase = purchaseService.getPurchase(tranNo);
-//		purchase = purchaseService.getPurchase(tranNo);
 		System.out.println("purchase : " + purchase);
 		
 		// Model 과 View 연결
@@ -135,35 +135,29 @@ public class PurchaseController {
 		// Model 과 View 연결
 		model.addAttribute("purchase", purchase);
 		session.getAttribute("purchase");
+		session.setAttribute("purchase", purchase);
 		return "forward:/purchase/updatePurchaseView.jsp";
 	}
 	
 	@RequestMapping("/updatePurchase.do")
-	public String updatePurchase( @RequestParam("tranNo") int tranNo,
-									@ModelAttribute("purchase") Purchase purchase , 
-									Model model , HttpSession session) throws Exception{
+	public String updatePurchase(@RequestParam("tranNo") int tranNo,
+									@ModelAttribute("purchase") Purchase purchase,
+									Model model) throws Exception{
 		
-		User user = (User)session.getAttribute("user");
-	
-//		purchase = purchaseService.getPurchase(tranNo);
-		purchase.setTranNo(tranNo);
-		purchase.setBuyer(user);
-		
-		model.addAttribute("user",user);
-		model.addAttribute("purchase",purchase);
-		
-		session.setAttribute("purchase",purchase);
-		
-		
-		//Business Logic
+		//먼저  view.jsp에 있는 업데이트 정보를 purchase에 넣어줌
 		purchaseService.updatePurcahse(purchase);
 		
+		//기존에 있던 정보를 select
+		Purchase purchaseSelect = purchaseService.getPurchase(tranNo);
+		model.addAttribute("purchase",purchaseSelect);
+		
+		//Business Logic
 		System.out.println("/updatePurchase.do");
+
 		
-		
-		System.out.println("333/updatePurchase.do");
 		
 		return "forward:/purchase/updatePurchase.jsp";
+		
 	}
 	
 	@RequestMapping("/listPurchase.do")
