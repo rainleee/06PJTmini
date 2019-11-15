@@ -88,33 +88,12 @@ public class PurchaseDaoImpl implements PurchaseDao {
 	}
 
 	@Override
-	public Map<String, Object> getSaleList(Search search) throws Exception {
-//		
-//		Map<String,Object> map = new HashMap<String,Object>();
-//		
-//		System.out.println("search ::: "+search);
-//		System.out.println("buyerId" + buyerId);
-//		
-//		
-//		map.put("search", search);
-//		map.put("buyerId", buyerId);
-//		
-//
-//		List<Purchase> list = sqlSession.selectList("PurchaseMapper.getSaleList", map);
-//		
-////		System.out.println("Dao getPurchaseList ::: "+list);
-//		
-//		for (int i = 0; i < list.size(); i++) {
-//			list.get(i).setBuyer((User)sqlSession.selectOne("UserMapper.getUser", list.get(i).getBuyer().getUserId()));
-//			list.get(i).setPurchaseProd((Product)sqlSession.selectOne("ProductMapper.getProduct", list.get(i).getPurchaseProd().getProdNo()));
-//		}
-//		
-//		map.put("totalCount", sqlSession.selectOne("PurchaseMapper.getTotalCountPurchase", buyerId));
-//		
-//		map.put("list", list);
-
+	public List<Purchase> getSaleList(Search search) throws Exception {
 		
-		return null;
+		System.out.println("search ::: "+search);
+
+		return sqlSession.selectList("PurchaseMapper.getSaleList", search);
+		
 	}
 	
 	
@@ -166,5 +145,12 @@ public class PurchaseDaoImpl implements PurchaseDao {
 		return sqlSession.selectOne("PurchaseMapper.getTotalCountPurchase",buyerId);
 		
 	}
+
+	@Override
+	public int getTotalCountSale(Search search) throws Exception {
+		return sqlSession.selectOne("PurchaseMapper.getTotalCountSale");
+	}
+	
+	
 	
 }

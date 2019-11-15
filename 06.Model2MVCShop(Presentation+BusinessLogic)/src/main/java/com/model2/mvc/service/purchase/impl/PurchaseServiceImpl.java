@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.Purchase;
 import com.model2.mvc.service.purchase.PurchaseDao;
 import com.model2.mvc.service.purchase.PurchaseService;
@@ -59,16 +60,24 @@ public class PurchaseServiceImpl implements PurchaseService {
 	}
 	
 	@Override
-	public Map<String, Object> getSaleList(Search search) throws Exception {
-//		System.out.println("search ::: "+search);
-//		
-//		Map<String,Object> map = purchaseDao.getPurchaseList(search, buyerId);
-//		
-//		int totalCount = purchaseDao.getTotalCount(buyerId);
-//		
-//		map.put("totalCount", new Integer(totalCount));
+	public Map<String,Object> getSaleList(Search search) throws Exception {
 		
-		return null;
+		System.out.println("getSaleList search ::: "+search);
+		List<Purchase> list = purchaseDao.getSaleList(search);
+		System.out.println("lllllist : " + list);
+		
+		int totalCount = purchaseDao.getTotalCountSale(search);
+		
+		System.out.println("totalCount : " + totalCount);
+		
+		Map<String, Object> map = new HashMap<String, Object>();
+		map.put("list", list );
+		map.put("totalCount", new Integer(totalCount));
+		
+		System.out.println("getSaleList map : " + map.get("list"));
+		System.out.println("getSaleList map : " + map.get("totalCount"));
+		
+		return map;
 	}
 	
 

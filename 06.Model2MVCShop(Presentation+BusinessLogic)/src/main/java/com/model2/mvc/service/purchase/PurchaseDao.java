@@ -22,7 +22,7 @@ public interface PurchaseDao {
 	public Map<String, Object> getPurchaseList(Search search, String buyerId) throws Exception;
 	
 	//getSaleList(판매리스트 미구현기능)
-	public Map<String,Object> getSaleList(Search search) throws Exception;
+	public List<Purchase> getSaleList(Search search) throws Exception;
 	
 	//user 구매목록조회
 	public Map<String,Object> getListPurchaseProduct(Search search, String buyerId) throws Exception;
@@ -36,4 +36,5 @@ public interface PurchaseDao {
 	//총 구매갯수를 세기위한 TotalCount
 	public int getTotalCount(String buyerId) throws Exception;
 	
+	public int getTotalCountSale(Search search) throws Exception;
 }

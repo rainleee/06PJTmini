@@ -2,26 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%--@page import="java.util.List"--%>
-
-<%--@ page import="com.model2.mvc.service.domain.Product"--%>
-<%--@ page import="com.model2.mvc.common.Search" --%>
-<%--@ page import="com.model2.mvc.common.Page"--%>
-<%--@ page import="com.model2.mvc.common.util.CommonUtil"--%>
-
-
-<%--
-	List<Product> list = (List<Product>) request.getAttribute("list");
-	Page resultPage=(Page)request.getAttribute("resultPage");
-	
-	Search search = (Search) request.getAttribute("search");
-	
-	//EL사용으로 널체크의 유무를 굳이 method로 구현하지 않아도 됨
-	String searchCondition = CommonUtil.null2str(search.getSearchCondition());
-	String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
-	
-	String menu = request.getParameter("menu");
---%>
 
 <html>
 <head>
@@ -119,12 +99,7 @@
 				<tr>
 					<td colspan="11" bgcolor="808285" height="1"></td>
 				</tr>
-				<%--
-					for (int i = 0; i < list.size(); i++) {
-						Product Product = list.get(i);
-
-						if (Product.getProTranCode().equals("sale")) {
-				--%>
+				
 				<c:set var="i" value="0" />
 				<c:forEach var="purchase" items="${list}">
 					<c:set var="i" value="${i + 1}" />
@@ -133,8 +108,6 @@
 						<td></td>
 	
 						<td align="left">
-							<!-- a href="/updateProductView.do?prodNo=<!%=vo.getProdNo()%>&menu=<!%=menu%>"><!%=vo.getProdName()%></a> -->
-	
 							<a
 							href="/getProduct.do?prodNo=${purchase.purchaseProd.prodNo}&menu=${param.menu}">${purchase.purchaseProd.prodName}</a>
 						</td>
@@ -148,37 +121,26 @@
 						<td></td>
 						<td align="left">
 						
-						<!-- user가 아직 구매를 하지않은 물품을 보는 경우 -->
-						<c:if test="${param.menu == 'search' && purchase.purchaseProd.proTranCode == 'sale'}">
-							구매 가능
-						</c:if>
-						
 						<!-- 어드민이 아직 구매를 하지않은 물품을 보는 경우 -->
-						<c:if test="${param.menu == 'manage' && purchase.purchaseProd.proTranCode == 'sale'}">
+						<c:if test="${purchase.tranCode == 'sale'}">
 							판매중
 						</c:if>
 						
 						<!-- 어드민이 구매를 한 user에게 [배송을 보내기전] 첫번째 -->
-						<c:if test="${param.menu == 'manage' && fn:trim(purchase.purchaseProd.proTranCode) == '1'}">
-							구매 완료 <a href="/updateTranCodeByProd.do?prodNo=${list.purchaseProd.prodNo}&tranCode=2&currentPage=${resultPage.currentPage}"> 배송하기 </a>
+						<c:if test="${fn:trim(purchase.tranCode) == '1'}">
+							구매 완료 <a href="/updateTranCodeByProd.do?prodNo=${purchase.purchaseProd.prodNo}&tranCode=2&currentPage=${resultPage.currentPage}"> 배송하기 </a>
 						</c:if>
 						
 						<!-- user에게 배송을 보낸 후 [수령확인]을 기다리는 중 -->
-						<c:if test="${param.menu == 'manage' && fn:trim(purchase.purchaseProd.proTranCode) == '2'}">
+						<c:if test="${fn:trim(purchase.tranCode) == '2'}">
 							배송중, 구매자 수령대기
 						</c:if>
 						
 						<!-- user가 [구매확정]을 누른경우  -->
-						<c:if test="${param.menu == 'manage' && fn:trim(purchase.purchaseProd.proTranCode) == '3'}">
+						<c:if test="${fn:trim(purchase.tranCode) == '3'}">
 							구매완료
 						</c:if>
 						
-						<!-- user가 구매한 물품을 보는 경우 -->
-						<c:if test="${param.menu == 'search' && purchase.purchaseProd.proTranCode != 'sale'}">
-							재고 없음
-						</c:if>
- 
-
 					</td>
 				</tr>
 				<tr>

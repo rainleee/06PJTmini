@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.model2.mvc.common.Search;
+import com.model2.mvc.service.domain.Product;
 import com.model2.mvc.service.domain.Purchase;
 
 //Dao에 직접 연관하지 않고 Dao에 구성된 로직을 불러오는 역할만 한다.

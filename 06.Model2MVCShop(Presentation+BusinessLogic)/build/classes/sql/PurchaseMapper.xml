@@ -9,6 +9,10 @@
 	<!-- transaction(purchase) table -->
 	<resultMap id="purchaseSelectMap" type="purchase">
 		<result property="tranNo" 			column="tran_no" 			jdbcType="INTEGER"/>
+		<result property="purchaseProd.prodNo" 			column="prod_no" 			jdbcType="INTEGER"/>
+		<result property="purchaseProd.prodName" 			column="prod_name" 			jdbcType="VARCHAR"/>
+		<result property="purchaseProd.price" 			column="price" 			jdbcType="INTEGER"/>
+		<result property="purchaseProd.regDate" 			column="reg_date" 			jdbcType="INTEGER"/>
 		<result property="paymentOption" 	column="payment_option" 		jdbcType="VARCHAR" />
 		<result property="receiverName" 				column="receiver_name" 					jdbcType="VARCHAR" />
 		<result property="receiverPhone" 				column="receiver_phone" 					jdbcType="VARCHAR" />
@@ -33,18 +37,6 @@
 		
 		</association>
 		
-		<association property="purchaseProd" javaType="product">
-
-			<id property="prodNo" column="prod_no" jdbcType="NUMERIC" />
-			
-			<result property="prodName" column="prod_name" jdbcType="VARCHAR"/>
-			<result property="prodDetail" column="prod_detail" jdbcType="VARCHAR" />
-			<result property="manuDate" column="manufacture_day"  jdbcType="VARCHAR"/>
-			<result property="price" column="price" jdbcType="NUMERIC"/>
-			<result property="fileName" column="image_file" jdbcType="VARCHAR"/>
-			<result property="regDate" column="reg_date"  jdbcType="DATE" />
-
-		</association>
 		
 	</resultMap>
 	
@@ -127,6 +119,22 @@
 						WHERE row_seq BETWEEN #{search.startRowNum:INTEGER} AND #{search.endRowNum:INTEGER} 
 	 </select>
 	 
+	 <select  id="getSaleList"  parameterType="search"	resultMap="purchaseSelectMap">
+	  	SELECT *
+	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
+	  					FROM		(	SELECT
+										p.prod_no,
+										p.prod_name,
+										p.price,
+										p.reg_date,
+										t.tran_status_code
+										FROM transaction t, product p
+										WHERE t.prod_no = p.prod_no
+										ORDER BY tran_no) inner_table
+						WHERE ROWNUM &lt;= #{endRowNum:INTEGER} )
+						WHERE row_seq BETWEEN #{startRowNum:INTEGER} AND #{endRowNum:INTEGER} 
+	 </select>
+	 
 	 <!-- SQL : updatePurchse -->
 	 <update	id="updatePurchase"	parameterType="purchase" >
 	   	UPDATE transaction 
@@ -148,15 +156,24 @@
 	 </update>
 	 
 	<!-- SQL : SELECT ROW Count --> 
-	<select  id="getTotalCountPurchase"  parameterType="String"	 resultType="int">
+	<select  id="getTotalCountPurchase"  parameterType="map"	 resultType="int">
+	 		SELECT COUNT (*) FROM (SELECT 
+								u.user_id,
+								u.user_name,
+								u.password
+								FROM transaction t, users u
+								WHERE t.buyer_id = u.user_id
+								AND t.buyer_id = #{value}
+								ORDER BY tran_no) countTable	
+	 </select>
+	 
+	 <!-- SQL : SELECT ROW Count --> 
+	 <!--  SalsList전용 -->
+	<select  id="getTotalCountSale"  resultType="int">
 	  	SELECT COUNT (*) FROM (SELECT 
-							u.user_id,
-							u.user_name,
-							u.password
-							FROM transaction t, users u
-							WHERE t.buyer_id = u.user_id
-							AND t.buyer_id = #{value}
-							ORDER BY tran_no) countTable	
+								*
+								FROM transaction
+								ORDER BY tran_no) countTable	
 	 </select>
 	 
 	 
