@@ -148,34 +148,24 @@
 						<td></td>
 						<td align="left">
 						
-						<!-- user가 아직 구매를 하지않은 물품을 보는 경우 -->
-						<c:if test="${param.menu == 'search' && purchase.purchaseProd.proTranCode == 'sale'}">
-							구매 가능
-						</c:if>
-						
 						<!-- 어드민이 아직 구매를 하지않은 물품을 보는 경우 -->
-						<c:if test="${param.menu == 'manage' && purchase.purchaseProd.proTranCode == 'sale'}">
+						<c:if test="${purchase.tranCode == 'sale'}">
 							판매중
 						</c:if>
 						
 						<!-- 어드민이 구매를 한 user에게 [배송을 보내기전] 첫번째 -->
-						<c:if test="${param.menu == 'manage' && fn:trim(purchase.purchaseProd.proTranCode) == '1'}">
-							구매 완료 <a href="/updateTranCodeByProd.do?prodNo=${list.purchaseProd.prodNo}&tranCode=2&currentPage=${resultPage.currentPage}"> 배송하기 </a>
+						<c:if test="${fn:trim(purchase.tranCode) == '1'}">
+							구매 완료, 배송대기 중
 						</c:if>
 						
 						<!-- user에게 배송을 보낸 후 [수령확인]을 기다리는 중 -->
-						<c:if test="${param.menu == 'manage' && fn:trim(purchase.purchaseProd.proTranCode) == '2'}">
-							배송중, 구매자 수령대기
+						<c:if test="${fn:trim(purchase.tranCode) == '2'}">
+							배송중 <a href="/updateTranCode.do?tranNo=${purchase.tranNo}&tranCode=3&currentPage=${resultPage.currentPage}">구매확정</a>
 						</c:if>
 						
 						<!-- user가 [구매확정]을 누른경우  -->
-						<c:if test="${param.menu == 'manage' && fn:trim(purchase.purchaseProd.proTranCode) == '3'}">
-							구매완료
-						</c:if>
-						
-						<!-- user가 구매한 물품을 보는 경우 -->
-						<c:if test="${param.menu == 'search' && purchase.purchaseProd.proTranCode != 'sale'}">
-							재고 없음
+						<c:if test="${fn:trim(purchase.tranCode) == '3'}">
+							구매확정
 						</c:if>
  
 

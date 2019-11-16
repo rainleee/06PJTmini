@@ -162,23 +162,14 @@ public class PurchaseController {
 	
 	@RequestMapping("/listPurchase.do")
 	public String listPurchase( @ModelAttribute("search") Search search ,
-								@ModelAttribute("page") Page page ,
 								@ModelAttribute("user") User user,
-								Model model , HttpSession session) throws Exception{
+								Model model) throws Exception{
 		
 		System.out.println("/listPurchase.do");
 		
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
-		
-		search.setPageSize(pageSize);
-		//아래 보여줄 pageUnit을 세팅해줬음. 페지이 모델어트리뷰트 추가
-		page.setPageUnit(pageUnit);
-		
-		user = (User) session.getAttribute("user");
-		
-		
 		
 		// Business logic 수행
 		Map<String , Object> map = purchaseService.getPurchaseList(search, user.getUserId());
@@ -199,22 +190,14 @@ public class PurchaseController {
 	
 	@RequestMapping("/listPurchaseProduct.do")
 	public String listPurchaseProduct( @ModelAttribute("search") Search search ,
-								@ModelAttribute("page") Page page ,
 								@ModelAttribute("user") User user,
-								Model model , HttpSession session) throws Exception{
+								Model model) throws Exception{
 		
 		System.out.println("/listPurchaseProduct.do");
 		
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
-		
-		search.setPageSize(pageSize);
-		//아래 보여줄 pageUnit을 세팅해줬음. 페지이 모델어트리뷰트 추가
-		page.setPageUnit(pageUnit);
-		
-		user = (User) session.getAttribute("user");
-		
 		
 		
 		// Business logic 수행
@@ -235,23 +218,14 @@ public class PurchaseController {
 	
 	@RequestMapping("/listSale.do")
 	public String listSale( @ModelAttribute("search") Search search ,
-								@ModelAttribute("page") Page page ,
-								@ModelAttribute("user") User user,
-								Model model , HttpSession session) throws Exception{
+								@ModelAttribute("purchase") Purchase purchase,
+								Model model) throws Exception{
 		
 		System.out.println("/listSale.do");
 		
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
-		
-//		search.setSearchCondition(searchCondition);
-//		search.setSearchKeyword(searchKeyword);
-		search.setPageSize(pageSize);
-		//아래 보여줄 pageUnit을 세팅해줬음. 페지이 모델어트리뷰트 추가
-		page.setPageUnit(pageUnit);
-		user = (User) session.getAttribute("user");
-		
 		
 		
 		// Business logic 수행
@@ -260,7 +234,7 @@ public class PurchaseController {
 		
 		
 		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-//		System.out.println("ddd : " + resultPage);
+		System.out.println(resultPage);
 		
 		// Model 과 View 연결
 		model.addAttribute("list", map.get("list"));
@@ -269,6 +243,43 @@ public class PurchaseController {
 		System.out.println("model : " + model);
 		
 		return "forward:/purchase/listSale.jsp";
+	}
+	
+	@RequestMapping("/updateTranCode.do")
+	public String updateTranCode(@RequestParam("tranCode") String tranCode,
+								@ModelAttribute("purchase") Purchase purchase,
+								@ModelAttribute("search") Search search ,
+								Model model ) throws Exception{
+		
+		String resultForward = "forward:/purchase/listSale.jsp";
+		
+		System.out.println("/updateTranCode.do");
+		
+		System.out.println("purchase tranCode 비교(전) : " + purchase);
+		
+		if(purchase.getTranCode().trim().equals("2")) {
+			purchase.setTranCode(tranCode);
+			System.out.println("purchase tranCode 비교(if) : " + purchase);
+		}else if(purchase.getTranCode().trim().equals("3")){
+			purchase.setTranCode(tranCode);
+		}
+		
+		// Business logic 수행
+		
+		System.out.println("purchase tranCode 비교(후) : " + purchase);
+		
+		
+		purchaseService.updateTranCode(purchase);
+		
+//		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+//		System.out.println(resultPage);
+		
+		// Model 과 View 연결
+		model.addAttribute("purchase", purchase);
+//		model.addAttribute("resultPage", resultPage);
+		System.out.println("update purchase  : " + purchase);
+		
+		return resultForward;
 	}
 	
 	
