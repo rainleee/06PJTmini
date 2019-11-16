@@ -241,6 +241,7 @@ public class PurchaseController {
 			search.setCurrentPage(1);
 		}
 		
+		search.setPageSize(pageSize);
 		
 		// Business logic ผ๖วเ
 		Map<String , Object> map = purchaseService.getSaleList(search);
