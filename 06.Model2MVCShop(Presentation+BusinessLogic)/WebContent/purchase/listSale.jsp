@@ -128,7 +128,7 @@
 						
 						<!-- 어드민이 구매를 한 user에게 [배송을 보내기전] 첫번째 -->
 						<c:if test="${fn:trim(purchase.tranCode) == '1'}">
-							구매 완료 <a href="/updateTranCodeByProd.do?prodNo=${purchase.purchaseProd.prodNo}&tranCode=2&currentPage=${resultPage.currentPage}"> 배송하기 </a>
+							구매 완료 <a href="/updateTranCode.do?tranNo=${purchase.tranNo}&tranCode=2&currentPage=${resultPage.currentPage}"> 배송하기 </a>
 						</c:if>
 						
 						<!-- user에게 배송을 보낸 후 [수령확인]을 기다리는 중 -->

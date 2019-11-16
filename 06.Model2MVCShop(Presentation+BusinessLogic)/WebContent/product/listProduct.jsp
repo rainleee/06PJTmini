@@ -2,26 +2,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%--@page import="java.util.List"--%>
-
-<%--@ page import="com.model2.mvc.service.domain.Product"--%>
-<%--@ page import="com.model2.mvc.common.Search" --%>
-<%--@ page import="com.model2.mvc.common.Page"--%>
-<%--@ page import="com.model2.mvc.common.util.CommonUtil"--%>
-
-
-<%--
-	List<Product> list = (List<Product>) request.getAttribute("list");
-	Page resultPage=(Page)request.getAttribute("resultPage");
-	
-	Search search = (Search) request.getAttribute("search");
-	
-	//EL사용으로 널체크의 유무를 굳이 method로 구현하지 않아도 됨
-	String searchCondition = CommonUtil.null2str(search.getSearchCondition());
-	String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
-	
-	String menu = request.getParameter("menu");
---%>
 
 <html>
 <head>
@@ -134,6 +114,7 @@
 				<c:set var="i" value="0" />
 				<c:forEach var="product" items="${list}">
 					<c:set var="i" value="${i + 1}" />
+						<c:if test="${product.proTranCode == 'sale'}">
 						<tr class="ct_list_pop">
 						<td align="center">${i}</td>
 						<td></td>
@@ -144,8 +125,17 @@
 							<a
 							href="/getProduct.do?prodNo=${product.prodNo}&menu=${param.menu}">${product.prodName}</a>
 						</td>
+						</c:if>
 						
 						<!-- sale이 아니라면  -->
+						<c:if test="${product.proTranCode != 'sale'}">
+							<tr class="ct_list_pop">
+							<td align="center">${i}</td>
+							<td></td>
+		
+							<td align="left">${product.prodName}</td>
+						</c:if>
+					
 					
 						<td></td>
 						<td align="left">${product.price}</td>

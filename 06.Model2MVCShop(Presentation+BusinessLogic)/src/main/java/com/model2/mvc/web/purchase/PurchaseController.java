@@ -208,6 +208,7 @@ public class PurchaseController {
 		}
 		
 		search.setPageSize(pageSize);
+		
 		//아래 보여줄 pageUnit을 세팅해줬음. 페지이 모델어트리뷰트 추가
 		
 		user = (User) session.getAttribute("user");
@@ -232,7 +233,6 @@ public class PurchaseController {
 	
 	@RequestMapping("/listSale.do")
 	public String listSale( @ModelAttribute("search") Search search ,
-								@ModelAttribute("purchase") Purchase purchase,
 								Model model) throws Exception{
 		
 		System.out.println("/listSale.do");
@@ -243,6 +243,8 @@ public class PurchaseController {
 		
 		search.setPageSize(pageSize);
 		
+		
+
 		// Business logic 수행
 		Map<String , Object> map = purchaseService.getSaleList(search);
 		System.out.println("map : " + map);
@@ -262,6 +264,9 @@ public class PurchaseController {
 	
 	@RequestMapping("/updateTranCode.do")
 	public String updateTranCode(@RequestParam("tranCode") String tranCode,
+								@RequestParam("tranNo") int tranNo,
+								@RequestParam("currentPage") int currentPage,
+								@ModelAttribute("product") Product product,
 								@ModelAttribute("purchase") Purchase purchase,
 								@ModelAttribute("search") Search search ,
 								Model model ) throws Exception{
@@ -272,30 +277,80 @@ public class PurchaseController {
 		
 		System.out.println("purchase tranCode 비교(전) : " + purchase);
 		
-		if(purchase.getTranCode().trim().equals("2")) {
+		purchase.setTranNo(tranNo);
+		
+		if(purchase.getTranCode().trim().equals("1")) {
 			purchase.setTranCode(tranCode);
+			search.setCurrentPage(currentPage);
+		}else if(purchase.getTranCode().trim().equals("2")) {
+			purchase.setTranCode(tranCode);
+			search.setCurrentPage(currentPage);
+			
+			resultForward = "forward:/purchase/listPurchaseProduct.jsp";
 			System.out.println("purchase tranCode 비교(if) : " + purchase);
+			
 		}else if(purchase.getTranCode().trim().equals("3")){
 			purchase.setTranCode(tranCode);
+			search.setCurrentPage(currentPage);
+			
+			resultForward = "forward:/purchase/listPurchaseProduct.jsp";
 		}
-		
-		// Business logic 수행
 		
 		System.out.println("purchase tranCode 비교(후) : " + purchase);
 		
-		
+		// Business logic 수행
 		purchaseService.updateTranCode(purchase);
 		
-//		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-//		System.out.println(resultPage);
+		Map<String , Object> map = purchaseService.getSaleList(search);
+		System.out.println("map : " + map);
+				
+		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+		System.out.println(resultPage);
 		
 		// Model 과 View 연결
 		model.addAttribute("purchase", purchase);
-//		model.addAttribute("resultPage", resultPage);
+		model.addAttribute("resultPage", resultPage);
 		System.out.println("update purchase  : " + purchase);
 		
 		return resultForward;
 	}
+	
+//	@RequestMapping("/updateTranCodeByProd.do")
+//	public String updateTranCodeByProd(@RequestParam("tranCode") String tranCode,
+//								@RequestParam("currentPage") int currentPage,
+//								@ModelAttribute("purchase") Purchase purchase,
+//								@ModelAttribute("search") Search search ,
+//								Model model ) throws Exception{
+//		
+//		System.out.println("tranCode : " + tranCode);
+//		
+//		String resultForward = "forward:/purchase/listSale.jsp";
+//		
+//		System.out.println("/updateTranCodeByProd.do");
+//		
+//		
+//		// Business logic 수행
+//		
+//		System.out.println("purchase tranCode 비교 : " + purchase);
+//		
+//		search.setCurrentPage(currentPage);
+//		purchase.setTranCode(tranCode);
+//		
+//		purchaseService.updateTranCode(purchase);
+//		
+//		// Business logic 수행
+//		Map<String , Object> map = purchaseService.getSaleList(search);
+//		System.out.println("map : " + map);
+//				
+//		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
+//		System.out.println(resultPage);
+//		
+//		// Model 과 View 연결
+//		model.addAttribute("purchase", purchase);
+//		model.addAttribute("resultPage", resultPage);
+//		
+//		return resultForward;
+//	}
 	
 	
 	

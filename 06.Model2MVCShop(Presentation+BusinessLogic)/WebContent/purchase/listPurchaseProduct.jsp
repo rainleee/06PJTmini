@@ -148,10 +148,6 @@
 						<td></td>
 						<td align="left">
 						
-						<!-- 어드민이 아직 구매를 하지않은 물품을 보는 경우 -->
-						<c:if test="${purchase.tranCode == 'sale'}">
-							판매중
-						</c:if>
 						
 						<!-- 어드민이 구매를 한 user에게 [배송을 보내기전] 첫번째 -->
 						<c:if test="${fn:trim(purchase.tranCode) == '1'}">

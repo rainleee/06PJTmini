@@ -15,7 +15,10 @@
 		<result property="price" 				column="price" 					jdbcType="INTEGER" />
 		<result property="fileName" 				column="image_file" 					jdbcType="VARCHAR" />
 		<result property="regDate" 			column="reg_date" 		jdbcType="DATE" />
+		<result	property="proTranCode"		column="tsc"	jdbcType="VARCHAR"	/>
 	</resultMap>
+	
+	
 	
 	 
 	 <!-- Product -->
@@ -39,7 +42,14 @@
 	 <select  id="getProductList"  parameterType="search"	resultMap="productSelectMap">
 	  	SELECT *
 	  	FROM (	SELECT inner_table.* , ROWNUM AS row_seq
-	  					FROM		(	SELECT * FROM product
+	  					FROM		(	SELECT 
+										p.prod_no, 
+										p.prod_name, 
+										p.price, 
+										p.reg_date, 
+										NVL(t.tran_status_code, 'sale') tsc
+										FROM product p, transaction t 
+										WHERE p.prod_no = t.prod_no(+)
 											<if test="searchCondition != null">
 												<where>
 													<if test="searchCondition.equals('0') and searchKeyword !='' ">

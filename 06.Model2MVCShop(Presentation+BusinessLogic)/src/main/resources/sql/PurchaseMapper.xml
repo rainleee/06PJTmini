@@ -54,7 +54,7 @@
 			tran_status_code, 
 			order_data, 
 			dlvy_date ) 
-			VALUES(seq_purchase_no.NEXTVAL, #{purchaseProd.prodNo}, #{buyer.userId}, #{paymentOption:VARCHAR}, #{receiverName:VARCHAR}, #{receiverPhone:VARCHAR}, #{divyAddr:VARCHAR}, #{divyRequest:VARCHAR}, #{tranCode:VARCHAR}, sysdate, #{divyDate:VARCHAR})
+			VALUES(seq_purchase_no.NEXTVAL, #{purchaseProd.prodNo}, #{buyer.userId}, #{paymentOption:VARCHAR}, #{receiverName:VARCHAR}, #{receiverPhone:VARCHAR}, #{divyAddr:VARCHAR}, #{divyRequest:VARCHAR}, 1, sysdate, #{divyDate:VARCHAR})
 	 </insert>
 	 
 	 <!-- SQL : SELECT ONE -->
@@ -126,7 +126,8 @@
 										p.prod_name,
 										p.price,
 										p.reg_date,
-										t.tran_status_code
+										t.tran_status_code,
+										t.tran_no
 										FROM transaction t, product p
 										WHERE t.prod_no = p.prod_no
 										ORDER BY tran_no) inner_table
