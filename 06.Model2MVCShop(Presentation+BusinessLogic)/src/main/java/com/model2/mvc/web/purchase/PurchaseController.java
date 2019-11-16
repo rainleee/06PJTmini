@@ -163,13 +163,21 @@ public class PurchaseController {
 	@RequestMapping("/listPurchase.do")
 	public String listPurchase( @ModelAttribute("search") Search search ,
 								@ModelAttribute("user") User user,
-								Model model) throws Exception{
+								Model model, HttpSession session) throws Exception{
 		
 		System.out.println("/listPurchase.do");
 		
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
+//		System.out.println("search의 값(전) :" + search);
+		search.setPageSize(pageSize);
+		//아래 보여줄 pageUnit을 세팅해줬음. 페지이 모델어트리뷰트 추가
+//		System.out.println("search의 값(후) :" + search);
+		
+		user = (User) session.getAttribute("user");
+		
+		
 		
 		// Business logic 수행
 		Map<String , Object> map = purchaseService.getPurchaseList(search, user.getUserId());
@@ -191,13 +199,19 @@ public class PurchaseController {
 	@RequestMapping("/listPurchaseProduct.do")
 	public String listPurchaseProduct( @ModelAttribute("search") Search search ,
 								@ModelAttribute("user") User user,
-								Model model) throws Exception{
+								Model model,HttpSession session) throws Exception{
 		
 		System.out.println("/listPurchaseProduct.do");
 		
 		if(search.getCurrentPage() ==0 ){
 			search.setCurrentPage(1);
 		}
+		
+		search.setPageSize(pageSize);
+		//아래 보여줄 pageUnit을 세팅해줬음. 페지이 모델어트리뷰트 추가
+		
+		user = (User) session.getAttribute("user");
+		
 		
 		
 		// Business logic 수행
