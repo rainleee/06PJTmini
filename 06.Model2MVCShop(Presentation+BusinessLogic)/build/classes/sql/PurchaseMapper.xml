@@ -129,8 +129,21 @@
 										t.tran_status_code,
 										t.tran_no
 										FROM transaction t, product p
-										WHERE t.prod_no = p.prod_no
-										ORDER BY tran_no) inner_table
+										<where> 
+											p.prod_no = t.prod_no(+)
+											<if test="searchCondition != null ">
+													<if test="searchCondition == 0 and searchKeyword !='' ">
+										 				AND p.prod_No LIKE '%'||#{searchKeyword}||'%'
+													</if>
+													<if test="searchCondition == 1 and searchKeyword !='' ">
+										 				AND UPPER(p.prod_name) LIKE UPPER('%'||#{searchKeyword}||'%')
+													</if>
+													<if test="searchCondition == 2 and searchKeyword !='' ">
+										 				AND p.price LIKE '%'||#{searchKeyword}||'%'
+													</if>
+											</if>
+										</where>
+										ORDER BY t.tran_no) inner_table
 						WHERE ROWNUM &lt;= #{endRowNum:INTEGER} )
 						WHERE row_seq BETWEEN #{startRowNum:INTEGER} AND #{endRowNum:INTEGER} 
 	 </select>
