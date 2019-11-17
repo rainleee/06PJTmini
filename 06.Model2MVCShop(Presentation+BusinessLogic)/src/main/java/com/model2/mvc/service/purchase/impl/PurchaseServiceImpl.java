@@ -66,7 +66,7 @@ public class PurchaseServiceImpl implements PurchaseService {
 		List<Purchase> list = purchaseDao.getSaleList(search);
 		System.out.println("lllllist : " + list);
 		
-		int totalCount = purchaseDao.getTotalCountSale(search);
+		int totalCount = purchaseDao.getTotalCountSale();
 		
 		System.out.println("totalCount : " + totalCount);
 		

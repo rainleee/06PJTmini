@@ -208,6 +208,7 @@ public class PurchaseController {
 		}
 		
 		search.setPageSize(pageSize);
+		System.out.println("dfdfdfdsf : " + search);
 		
 		//아래 보여줄 pageUnit을 세팅해줬음. 페지이 모델어트리뷰트 추가
 		
@@ -266,50 +267,41 @@ public class PurchaseController {
 	public String updateTranCode(@RequestParam("tranCode") String tranCode,
 								@RequestParam("tranNo") int tranNo,
 								@RequestParam("currentPage") int currentPage,
-								@ModelAttribute("product") Product product,
 								@ModelAttribute("purchase") Purchase purchase,
 								@ModelAttribute("search") Search search ,
 								Model model ) throws Exception{
 		
-		String resultForward = "forward:/purchase/listSale.jsp";
 		
 		System.out.println("/updateTranCode.do");
 		
-		System.out.println("purchase tranCode 비교(전) : " + purchase);
 		
 		purchase.setTranNo(tranNo);
+		System.out.println("dsdsd : " + currentPage);
 		
-		if(purchase.getTranCode().trim().equals("1")) {
+		String resultForward = "/listSale.do?CurrentPage=" + currentPage;
+		
+		
+		if(purchase.getTranCode().trim().equals("2")) {
 			purchase.setTranCode(tranCode);
 			search.setCurrentPage(currentPage);
-		}else if(purchase.getTranCode().trim().equals("2")) {
-			purchase.setTranCode(tranCode);
-			search.setCurrentPage(currentPage);
-			
-			resultForward = "forward:/purchase/listPurchaseProduct.jsp";
-			System.out.println("purchase tranCode 비교(if) : " + purchase);
+					
 			
 		}else if(purchase.getTranCode().trim().equals("3")){
 			purchase.setTranCode(tranCode);
 			search.setCurrentPage(currentPage);
 			
-			resultForward = "forward:/purchase/listPurchaseProduct.jsp";
+			resultForward = "/listPurchaseProduct.do?CurrentPage=" + currentPage;
 		}
 		
-		System.out.println("purchase tranCode 비교(후) : " + purchase);
+//		System.out.println("purchase tranCode 비교(후) : " + purchase);
 		
 		// Business logic 수행
 		purchaseService.updateTranCode(purchase);
 		
-		Map<String , Object> map = purchaseService.getSaleList(search);
-		System.out.println("map : " + map);
-				
-		Page resultPage = new Page( search.getCurrentPage(), ((Integer)map.get("totalCount")).intValue(), pageUnit, pageSize);
-		System.out.println(resultPage);
+		
 		
 		// Model 과 View 연결
 		model.addAttribute("purchase", purchase);
-		model.addAttribute("resultPage", resultPage);
 		System.out.println("update purchase  : " + purchase);
 		
 		return resultForward;

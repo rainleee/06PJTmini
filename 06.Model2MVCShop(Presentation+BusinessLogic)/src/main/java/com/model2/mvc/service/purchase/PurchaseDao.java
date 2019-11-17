@@ -36,5 +36,5 @@ public interface PurchaseDao {
 	//ÃÑ ±¸¸Å°¹¼ö¸¦ ¼¼±âÀ§ÇÑ TotalCount
 	public int getTotalCount(String buyerId) throws Exception;
 	
-	public int getTotalCountSale(Search search) throws Exception;
+	public int getTotalCountSale() throws Exception;
 }
