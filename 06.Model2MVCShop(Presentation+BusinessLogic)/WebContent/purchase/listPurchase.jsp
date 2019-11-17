@@ -3,20 +3,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
-<%--	
-	List<Purchase> list = (List<Purchase>) request.getAttribute("list");
-	
-	Page resultPage=(Page)request.getAttribute("resultPage");
-	
-	Search search = (Search) request.getAttribute("search");
-	
-	//유효성 체크부분. null일경우 CommonUtil의 static method 실행
-	String searchCondition = CommonUtil.null2str(search.getSearchCondition());
-	String searchKeyword = CommonUtil.null2str(search.getSearchKeyword());
-	
-	//얘가 필요한지 확인해보기
-	String menu = request.getParameter("menu");
---%>
 
 <html>
 <head>

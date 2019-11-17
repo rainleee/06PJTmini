@@ -49,21 +49,21 @@
 										p.reg_date, 
 										NVL(t.tran_status_code, 'sale') tsc
 										FROM product p, transaction t 
-										WHERE p.prod_no = t.prod_no(+)
-											<if test="searchCondition != null">
-												<where>
-													<if test="searchCondition.equals('0') and searchKeyword !='' ">
-										 				AND UPPER(prod_No) LIKE UPPER(%#{searchKeyword}%)
+										<where> 
+											p.prod_no = t.prod_no(+)
+											<if test="searchCondition != null ">
+													<if test="searchCondition == 0 and searchKeyword !='' ">
+										 				AND p.prod_No LIKE '%'||#{searchKeyword}||'%'
 													</if>
-													<if test="searchCondition.equals('1') and searchKeyword !='' ">
-										 				AND UPPER(prod_name) LIKE UPPER(%#{searchKeyword}%)
+													<if test="searchCondition == 1 and searchKeyword !='' ">
+										 				AND UPPER(p.prod_name) LIKE UPPER('%'||#{searchKeyword}||'%')
 													</if>
-													<if test="searchCondition.equals('2') and searchKeyword !='' ">
-										 				AND price LIKE %#{searchKeyword}%
+													<if test="searchCondition == 2 and searchKeyword !='' ">
+										 				AND p.price LIKE '%'||#{searchKeyword}||'%'
 													</if>
-												</where>
 											</if>
-											ORDER BY prod_no ) inner_table
+										</where>
+											ORDER BY p.prod_no) inner_table
 						WHERE ROWNUM &lt;=#{currentPage}*#{pageSize} )
 						WHERE row_seq BETWEEN ( ( #{currentPage} - 1) * #{pageSize} + 1) AND #{currentPage} * #{pageSize}
 	 </select>
@@ -84,21 +84,28 @@
 	 <!-- SQL : SELECT ROW Count -->	 
 	 <select  id="getTotalCountProduct"  parameterType="search"	 resultType="int">
 	  	SELECT COUNT(*)
-	  	FROM(	SELECT prod_name , price , manufacture_day
-											FROM product
-											<if test="searchCondition != null">
-												<where>
+	  	FROM(	SELECT 
+										p.prod_no, 
+										p.prod_name, 
+										p.price, 
+										p.reg_date, 
+										NVL(t.tran_status_code, 'sale') tsc
+										FROM product p, transaction t 
+										<where> 
+											p.prod_no = t.prod_no(+)
+											<if test="searchCondition != null ">
 													<if test="searchCondition == 0 and searchKeyword !='' ">
-										 				UPPER(prod_No) LIKE UPPER( #{searchKeyword} )
+										 				AND p.prod_No LIKE '%'||#{searchKeyword}||'%'
 													</if>
 													<if test="searchCondition == 1 and searchKeyword !='' ">
-										 				UPPER(prod_name) LIKE UPPER( #{searchKeyword} )
+										 				AND UPPER(p.prod_name) LIKE UPPER('%'||#{searchKeyword}||'%')
 													</if>
 													<if test="searchCondition == 2 and searchKeyword !='' ">
-										 				price LIKE #{searchKeyword}
+										 				AND p.price LIKE '%'||#{searchKeyword}||'%'
 													</if>
-												</where>
-											</if> ) countTable						
+											</if>
+										</where>
+											ORDER BY p.prod_no) countTable						
 	 </select>
 	 
 </mapper>
